@@ -28,7 +28,7 @@ bareRepoFolder := hdrive . hpath . "\code\bare-repos"
     ;         Sleep 50
     ; MsgBox, % "Done!"
 
-    ; Wait for the window to become active
+    ; Wait for the window to become active again (i.e. wait for paste action to finish)
     WinWaitActive, ahk_class CabinetWClass
 
     Sleep 5000 ; Wait for the folder to load
@@ -72,8 +72,8 @@ NavigateToFolder(folderPath)
 
 unzip(zipFile, targetFolder)
 {
-    MsgBox, Unzipping to %targetFolder%
-    RunWait PowerShell.exe -NoExit -Command Expand-Archive -Force -LiteralPath '%zipFile%' -DestinationPath %targetFolder%,,
+    ; MsgBox, Unzipping to %targetFolder%
+    RunWait PowerShell.exe -NoExit -Command Expand-Archive -Force -LiteralPath '%zipFile%' -DestinationPath %targetFolder%,, hide
 }
 
 getMostRecent(targetFolder) {
@@ -93,8 +93,11 @@ getMostRecent(targetFolder) {
         Continue
     StringSplit, FileItem, A_LoopField, %A_Tab%  ; Split into two parts at the tab char
     ; FileItem1 is FileTimeModified und FileItem2 is FileName
-    MsgBox, 36, Last modified file, %FileItem1% - %FileItem2%`n`nDo you want to continue?
-    IfMsgBox, Yes
-        return FileItem2
-    }    
+
+    ; MsgBox, 36, Last modified file, %FileItem1% - %FileItem2%`n`nDo you want to continue?
+    ; IfMsgBox, Yes
+    ;     return FileItem2
+    ; }    
+
+    return FileItem2
 }
