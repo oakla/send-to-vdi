@@ -7,6 +7,7 @@ SetWorkingDir, %A_ScriptDir%
 EnvGet, hdrive, Homedrive
 EnvGet, hpath, Homepath
 repoTransmissionFolder := hdrive . hpath . "\RepoTransmission"
+bareRepoFolder := hdrive . hpath . "\code\bare-repos"
 
 ; NOTE: The s-drive path didn't work because it has spaces
 ; repoTransmissionFolder := "S:\Operational Excellence\Improvement\AutoBots Initiative\99._RemoteSync"
@@ -38,20 +39,10 @@ repoTransmissionFolder := hdrive . hpath . "\RepoTransmission"
     mostRecentlyModifiedFile := getMostRecent(repoTransmissionFolder)
 
     ; Unzip file 
-    MsgBox, mostRecentlyModifiedFile is %mostRecentlyModifiedFile%
-    unzip(mostRecentlyModifiedFile, repoTransmissionFolder)
-    MsgBox, repoTransmissionFolder is %repoTransmissionFolder%
+    ; MsgBox, mostRecentlyModifiedFile is %mostRecentlyModifiedFile%
+    unzip(mostRecentlyModifiedFile, bareRepoFolder)
+    ; MsgBox, repoTransmissionFolder is %repoTransmissionFolder%
     return
-
-
-; unpack and delete zip
-^!e::
-    mostRecentlyModifiedFile := getMostRecent(repoTransmissionFolder)
-    MsgBox, mostRecentlyModifiedFile is %mostRecentlyModifiedFile%
-    unzip(mostRecentlyModifiedFile, repoTransmissionFolder)
-    MsgBox, repoTransmissionFolder is %repoTransmissionFolder%
-    return
-
 
 OpenInFileExplorer(targetFolder)
 {

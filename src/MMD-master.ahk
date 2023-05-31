@@ -5,6 +5,11 @@ SetWorkingDir, %A_ScriptDir%
 
 SetTitleMatchMode, 2 ; Set the window title matching mode to match any part of the title
 
+EnvGet, hdrive, Homedrive
+EnvGet, hpath, Homepath
+; Specify the location to send newly created zip files before they get sent to the VDI
+intermediateDirectory := hdrive . hpath . "\RepoTransmission"
+
 ^!s::
 {
     ; Get target source
@@ -20,7 +25,7 @@ SetTitleMatchMode, 2 ; Set the window title matching mode to match any part of t
 
     ; Create the output ZIP file path using the folder name and timestamp
     ; outputZip := folderPath . "\" . GetFolderName(folderPath) . "_" . timeStamp . ".zip"
-    intermediateDirectory := "C:\Users\Alexander.Oakley\RepoTransmission"
+
     outputZip := intermediateDirectory . "\" . GetFolderName(folderPath) . "_" . timeStamp . ".zip"
 
     ; Zip target source to a temp destination
