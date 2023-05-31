@@ -89,15 +89,16 @@ getMostRecent(targetFolder) {
     Sort, FileList, R  ;   ; Sort by time modified in reverse order
     Loop, Parse, FileList, `n
     {
-    If (A_LoopField = "") ; omit the last linefeed (blank item) at the end of the list.
-        Continue
-    StringSplit, FileItem, A_LoopField, %A_Tab%  ; Split into two parts at the tab char
-    ; FileItem1 is FileTimeModified und FileItem2 is FileName
+        If (A_LoopField = "") ; omit the last linefeed (blank item) at the end of the list.
+            Continue
+        StringSplit, FileItem, A_LoopField, %A_Tab%  ; Split into two parts at the tab char
+        ; FileItem1 is FileTimeModified und FileItem2 is FileName
 
-    ; MsgBox, 36, Last modified file, %FileItem1% - %FileItem2%`n`nDo you want to continue?
-    ; IfMsgBox, Yes
-    ;     return FileItem2
-    ; }    
+        ; MsgBox, 36, Last modified file, %FileItem1% - %FileItem2%`n`nDo you want to continue?
+        ; IfMsgBox, Yes
+        ;     return FileItem2
+        ; }    
 
-    return FileItem2
+        return FileItem2
+    }
 }
