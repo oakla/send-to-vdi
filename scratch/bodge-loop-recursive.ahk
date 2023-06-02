@@ -3,7 +3,7 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-; This feels like a bodge. I took a function that I knew found a folders immediate
+; This feels like a bodge. I took a function that I knew found a folder's immediate
 ; parent, and used that in a recursive funtion (ScanUp) that finds the first folder
 ; that is a child of a specified folder. I'm sure there's a better way to do this.
 
