@@ -42,6 +42,9 @@ bareRepoFolder := hdrive . hpath . "\code\bare-repos"
     ; MsgBox, mostRecentlyModifiedFile is %mostRecentlyModifiedFile%
     unzip(mostRecentlyModifiedFile, bareRepoFolder)
     ; MsgBox, repoTransmissionFolder is %repoTransmissionFolder%
+    ; Close active window
+    WinClose, ahk_class CabinetWClass
+
     return
 
 OpenInFileExplorer(targetFolder)
