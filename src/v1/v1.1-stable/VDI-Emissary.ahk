@@ -8,6 +8,7 @@ EnvGet, hdrive, Homedrive
 EnvGet, hpath, Homepath
 repoTransmissionFolder := hdrive . hpath . "\RepoTransmission"
 bareRepoFolder := hdrive . hpath . "\code\bare-repos"
+bareRepoSDrive := "S:\00-abots\bare-repos"
 
 ; NOTE: The s-drive path didn't work because it has spaces
 ; repoTransmissionFolder := "S:\Operational Excellence\Improvement\AutoBots Initiative\99._RemoteSync"
@@ -44,6 +45,7 @@ bareRepoFolder := hdrive . hpath . "\code\bare-repos"
     ; MsgBox, repoTransmissionFolder is %repoTransmissionFolder%
     ; Close active window
     WinClose, ahk_class CabinetWClass
+    unzipHidden(mostRecentlyModifiedFile, bareRepoShareDrive)
 
     return
 
@@ -77,6 +79,13 @@ unzip(zipFile, targetFolder)
 {
     ; MsgBox, Unzipping to %targetFolder%
     RunWait PowerShell.exe -Command Expand-Archive -Force -LiteralPath '%zipFile%' -DestinationPath %targetFolder%,, ; hide
+    return
+}
+
+unzipHidden(zipFile, targetFolder)
+{
+    ; MsgBox, Unzipping to %targetFolder%
+    RunWait PowerShell.exe -Command Expand-Archive -Force -LiteralPath '%zipFile%' -DestinationPath %targetFolder%,, hide
     return
 }
 
