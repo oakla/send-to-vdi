@@ -72,7 +72,7 @@ PowerShellZip(sourceFolder, outputZip){
     ; MsgBox, %sourceFolder%
     ; MsgBox, %outputZip%
     ; Zip
-    RunWait PowerShell.exe -Command Compress-Archive -LiteralPath '%sourceFolder%' -CompressionLevel Optimal -DestinationPath '%outputZip%',, Hide
+    RunWait PowerShell.exe -Command Compress-Archive -LiteralPath '%sourceFolder%' -CompressionLevel Optimal -DestinationPath '%outputZip%',, ; Hide
     ; MsgBox, Created: %outputZip% 
 }
 
@@ -133,6 +133,8 @@ ClipboardSetFiles(FilesToSet, DropEffect := "Copy") {
 FocusVDI() {
     ; Assumes the VDI is open on the current desktop environment
     ; Bring the Citrix VDI window into focus
+
+    ; WinActivate, CVS Main Windows HVD – AU - CFS - Desktop Viewer
     WinActivate, CVS Main Windows HVD
     return
 }

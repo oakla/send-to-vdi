@@ -76,7 +76,7 @@ NavigateToFolder(folderPath)
 unzip(zipFile, targetFolder)
 {
     ; MsgBox, Unzipping to %targetFolder%
-    RunWait PowerShell.exe -Command Expand-Archive -Force -LiteralPath '%zipFile%' -DestinationPath %targetFolder%,, hide
+    RunWait PowerShell.exe -Command Expand-Archive -Force -LiteralPath '%zipFile%' -DestinationPath %targetFolder%,, ; hide
     return
 }
 
