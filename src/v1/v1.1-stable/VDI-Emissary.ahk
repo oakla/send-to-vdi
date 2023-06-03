@@ -45,7 +45,7 @@ bareRepoSDrive := "S:\00-abots\bare-repos"
     ; MsgBox, repoTransmissionFolder is %repoTransmissionFolder%
     ; Close active window
     WinClose, ahk_class CabinetWClass
-    unzipHidden(mostRecentlyModifiedFile, bareRepoShareDrive)
+    unzipHidden(mostRecentlyModifiedFile, bareRepoSDrive)
 
     return
 
