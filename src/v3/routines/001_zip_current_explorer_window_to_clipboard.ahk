@@ -1,19 +1,18 @@
-#NoEnv ; Prevents checking empty variables as environment variables
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
-SetTitleMatchMode, 2 ; Set the window title matching mode to match any part of the title
 
-EnvGet, hdrive, Homedrive
-EnvGet, hpath, Homepath
-; Specify the location to send newly created zip files before they get sent to the VDI
-intermediateDirectory := hdrive . hpath . "\RepoTransmission"
+; Define the hotkey
+zip_current_explorer_window_to_clipboard() {
+
+   ; homePath := A_Home ; alternative homepath access method
+   EnvGet, hdrive, Homedrive
+   EnvGet, hpath, Homepath
+   ; Specify the location to send newly created zip files before they get sent to the VDI
+   intermediateZipDirectory := hdrive . hpath . "\ZipTransmission"
 
 
-; If a directory is open in File Explorer, zip that folder and copy the zip file to the clipboard
-^!z::
-{
     ; Get target source
     folderPath := GetActiveExplorerPath()
     ; Check if a folder path was obtained
@@ -22,20 +21,44 @@ intermediateDirectory := hdrive . hpath . "\RepoTransmission"
         MsgBox, No folder is currently selected in the File Explorer window.
         ExitApp
     }
+
+   ;  MsgBox, The selected item's folderPath is: %folderPath%
+
+   ;  MsgBox, intermediateZipDirectory is: %intermediateZipDirectory%
+    ; Zip the folder to an intermediate folder using PowerShell
+
     ; Generate a timestamp to append to the output ZIP file name
     formatTime, timeStamp, A_Now, yyyyMMdd_HHmmss
 
-    ; Create the output ZIP file path using the folder name and timestamp
-    ; outputZip := folderPath . "\" . GetFolderName(folderPath) . "_" . timeStamp . ".zip"
+    zipPath := intermediateZipDirectory . "\" . GetPathLeafName(folderPath) . "_" . timeStamp . ".zip"
+    MsgBox, Zip path is: %zipPath%
 
-    outputZip := intermediateDirectory . "\" . GetFolderName(folderPath) . "_" . timeStamp . ".zip"
-
-    ; Zip target source to a temp destination
-    PowerShellZip(folderPath, outputZip)
-
+    ;  PowerShellZipNoExit(folderPath, zipPath)
+     PowerShellZip(folderPath, zipPath)
+ 
     ; Copy newly created zip file to clip board
-    ClipboardSetFiles(outputZip, "Copy")
+    ClipboardSetFiles(zipPath, "Copy")
 }
+
+; Zip target source to a temp destination
+PowerShellZip(sourceFolder, outputZip){
+    ; MsgBox, %sourceFolder%
+    ; MsgBox, %outputZip%
+    ; Zip
+    RunWait PowerShell.exe -Command "Compress-Archive -LiteralPath '%sourceFolder%' -CompressionLevel Optimal -DestinationPath '%outputZip%'",, ; Hide
+    ; Wait for PowerShell to finish
+    Process, WaitClose, PowerShell.exe
+}
+    
+PowerShellZipNoExit(sourceFolder, outputZip){
+    ; MsgBox, %sourceFolder%
+    ; MsgBox, %outputZip%
+    ; Zip
+    RunWait PowerShell.exe -NoExit -Command "try { Compress-Archive -LiteralPath '%sourceFolder%' -CompressionLevel Optimal -DestinationPath '%outputZip%' } catch { Write-Host $_.Exception.Message; pause }",, ; Hide
+    ; Wait for PowerShell to finish
+    Process, WaitClose, PowerShell.exe
+}
+
 
 
 ; Get target source
@@ -54,24 +77,19 @@ GetActiveExplorerPath()
     }
 }
 
-; Function to get the folder name from a given path
-GetFolderName(path)
-{
-    SplitPath, path, , , folderName
-    return folderName
+
+GetPathLeafName(folderPath) {
+    return SubStr(folderPath, InStr(folderPath, "\", 0, -1) + 1)
 }
 
-; Zip target source to a temp destination
-PowerShellZip(sourceFolder, outputZip){
-    ; MsgBox, %sourceFolder%
-    ; MsgBox, %outputZip%
-    ; Zip
-    RunWait PowerShell.exe -Command Compress-Archive -LiteralPath '%sourceFolder%' -CompressionLevel Optimal -DestinationPath '%outputZip%',, ; Hide
-    ; MsgBox, Created: %outputZip% 
-}
 
 ; Copy file to clip board
 ClipboardSetFiles(FilesToSet, DropEffect := "Copy") {
+   if not (FileExist(FilesToSet))
+   {
+      MsgBox, The path %path% is invalid.
+      ExitApp
+   }
    ; FilesToSet - list of fully qualified file pathes separated by "`n" or "`r`n"
    ; DropEffect - preferred drop effect, either "Copy", "Move" or "" (empty string)
    Static TCS := A_IsUnicode ? 2 : 1 ; size of a TCHAR
@@ -115,10 +133,9 @@ ClipboardSetFiles(FilesToSet, DropEffect := "Copy") {
          DllCall("SetClipboardData", "UInt", PreferredDropEffect, "Ptr", hMem)
       }
       DllCall("CloseClipboard")
+      MsgBox, % "Files copied to clipboard"
       Return True
    }
+   MsgBox, % "Files copied FAILED to be clipboard"
    Return False
 }
-; Make VDI window active
-; Activate VDI emissary script
-
