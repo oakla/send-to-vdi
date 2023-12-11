@@ -6,7 +6,7 @@ SetWorkingDir, %A_ScriptDir%
 
 unpack_clipboard_zip(to_parent_folder) {
     ; homePath := A_Home ; alternative homepath access method
-    MsgBox, Target parent for unzipped file is %to_parent_folder%
+    ; MsgBox, Target parent for unzipped file is %to_parent_folder%
     EnvGet, hdrive, Homedrive
     EnvGet, hpath, Homepath
     ; Specify the location to send newly created zip files before they get sent to the VDI
@@ -19,7 +19,7 @@ unpack_clipboard_zip(to_parent_folder) {
     mostRecentlyModifiedFile := getMostRecent(intermediateReceivingDirectory)
     ; MsgBox, Most recently modified file is %mostRecentlyModifiedFile%
 
-    MsgBox, Unzipping %mostRecentlyModifiedFile% to %to_parent_folder%
+    ; MsgBox, Unzipping %mostRecentlyModifiedFile% to %to_parent_folder%
     unzip(mostRecentlyModifiedFile, to_parent_folder)
     ; MsgBox, repoTransmissionFolder is %repoTransmissionFolder%
     ; ; Close active window

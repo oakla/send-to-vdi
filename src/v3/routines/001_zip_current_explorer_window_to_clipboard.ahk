@@ -31,7 +31,7 @@ zip_current_explorer_window_to_clipboard() {
     formatTime, timeStamp, A_Now, yyyyMMdd_HHmmss
 
     zipPath := intermediateZipDirectory . "\" . GetPathLeafName(folderPath) . "_" . timeStamp . ".zip"
-    MsgBox, Zip path is: %zipPath%
+   ;  MsgBox, Zip path is: %zipPath%
 
     ;  PowerShellZipNoExit(folderPath, zipPath)
      PowerShellZip(folderPath, zipPath)
@@ -133,7 +133,7 @@ ClipboardSetFiles(FilesToSet, DropEffect := "Copy") {
          DllCall("SetClipboardData", "UInt", PreferredDropEffect, "Ptr", hMem)
       }
       DllCall("CloseClipboard")
-      MsgBox, % "Files copied to clipboard"
+      ; MsgBox, % "Files copied to clipboard"
       Return True
    }
    MsgBox, % "Files copied FAILED to be clipboard"
